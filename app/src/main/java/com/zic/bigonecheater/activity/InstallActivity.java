@@ -22,8 +22,6 @@ public class InstallActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        moveTaskToBack(true);
-
         File bigOneAppsDir = new File(boAppsPath);
         List<String> apks = new ArrayList<>();
         for (File apkFile : bigOneAppsDir.listFiles()) {
