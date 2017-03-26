@@ -27,9 +27,6 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
     private static final String bigOnePkgName = "bigone.danh.bai.online";
 
     @SuppressLint("SdCardPath")
-    private static final String boAppsPath = "/sdcard/Zickie/BigOneApps";
-
-    @SuppressLint("SdCardPath")
     private static final String accountListPath = "/sdcard/Zickie/accounts.txt";
 
     private Button btnNextFid;
@@ -157,8 +154,10 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
 
         ((ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("FacebookID", fid));
 
-        tvFid.setText(getString(R.string.tv_fb_id) + fid);
-        tvPassword.setText(getString(R.string.tv_fb_pass) + password);
+        String text = getString(R.string.tv_fb_id) + fid;
+        tvFid.setText(text);
+        text = getString(R.string.tv_fb_pass) + password;
+        tvPassword.setText(text);
     }
 
     private class NewBigOneTask extends AsyncTask {

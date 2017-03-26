@@ -30,8 +30,6 @@ public class DeviceIdFragment extends Fragment implements View.OnClickListener {
 
     private TextView tvCurDevice;
 
-    private String oldImei;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,10 +61,6 @@ public class DeviceIdFragment extends Fragment implements View.OnClickListener {
 
     public void changeDeviceInfo() {
 
-        String newImei = RandomUtils.newValidImei();
-
-        PrefsUtils.putImei(getActivity(), newImei);
-
         new ChangeDeviceInfoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -84,6 +78,8 @@ public class DeviceIdFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(Object o) {
+            String newImei = RandomUtils.newValidImei();
+            PrefsUtils.putImei(getActivity(), newImei);
             showCurDevice();
         }
     }
