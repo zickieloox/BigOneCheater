@@ -91,10 +91,7 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void newBigOne() {
-        AppUtils.killAsRoot(bigOnePkgName);
-        if (!AppUtils.launch(this, bigOnePkgName)) {
-            Toast.makeText(this, getString(R.string.toast_err_launch), Toast.LENGTH_SHORT).show();
-        }
+        new NewBigOneTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void installApps() {
@@ -215,4 +212,22 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
             Toast.makeText(DialogActivity.this, getString(R.string.toast_uninstalled), Toast.LENGTH_SHORT).show();
         }
     }
+
+    private class NewBigOneTask extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] params) {
+            AppUtils.killAsRoot(bigOnePkgName);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            if (!AppUtils.launch(DialogActivity.this, bigOnePkgName)) {
+                Toast.makeText(DialogActivity.this, getString(R.string.toast_err_launch), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }
+
+

@@ -1,9 +1,9 @@
 package com.zic.bigonecheater.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.zic.bigonecheater.R;
@@ -13,9 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstallActivity extends AppCompatActivity {
-
-    private static final String bigOnePkgName = "bigone.danh.bai.online";
+public class InstallActivity extends Activity {
 
     @SuppressLint("SdCardPath")
     private static final String boAppsPath = "/sdcard/Zickie/BigOneApps";
@@ -23,6 +21,8 @@ public class InstallActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        moveTaskToBack(true);
 
         File bigOneAppsDir = new File(boAppsPath);
         List<String> apks = new ArrayList<>();
@@ -32,8 +32,10 @@ public class InstallActivity extends AppCompatActivity {
 
             apks.add(apkFilePath);
         }
-        new InstallTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, apks);
-        AppUtils.launch(getApplicationContext(), bigOnePkgName);
+
+        Toast.makeText(this, "Installing...", Toast.LENGTH_SHORT).show();
+
+        new InstallActivity.InstallTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, apks);
     }
 
     private class InstallTask extends AsyncTask<List<String>, Void, String> {
@@ -52,6 +54,7 @@ public class InstallActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             Toast.makeText(InstallActivity.this, getString(R.string.toast_installed), Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 

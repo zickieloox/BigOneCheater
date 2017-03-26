@@ -1,9 +1,9 @@
 package com.zic.bigonecheater.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.zic.bigonecheater.R;
@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UninstallActivity extends AppCompatActivity {
+public class UninstallActivity extends Activity {
 
     @SuppressLint("SdCardPath")
     private static final String boAppsPath = "/sdcard/Zickie/BigOneApps";
@@ -21,6 +21,8 @@ public class UninstallActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        moveTaskToBack(true);
 
         File bigOneAppsDir = new File(boAppsPath);
         List<String> pkgNames = new ArrayList<>();
@@ -30,7 +32,10 @@ public class UninstallActivity extends AppCompatActivity {
 
             pkgNames.add(pkgName);
         }
-        new UninstallTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pkgNames);
+
+        Toast.makeText(this, "Uninstalling...", Toast.LENGTH_SHORT).show();
+
+        new UninstallActivity.UninstallTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pkgNames);
     }
 
     private class UninstallTask extends AsyncTask<List<String>, Void, String> {

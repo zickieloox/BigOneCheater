@@ -1,6 +1,7 @@
 package com.zic.bigonecheater.fragment;
 
 import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -57,13 +58,7 @@ public class DeviceIdFragment extends Fragment implements View.OnClickListener {
     }
 
     public void showCurDevice() {
-
-        // Copy the old Device Id Changer pref to get information and edit
-        ShellUtils.copyFileAsRoot(deviceIdChangerPrefsPath, myDeviceIdChangerPrefsPath);
-
-        oldImei = PrefsUtils.getImei(getActivity());
-        String text = oldImei + "\n";
-        tvCurDevice.setText(text);
+        new ShowCurDeviceTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void changeDeviceInfo() {
@@ -72,12 +67,42 @@ public class DeviceIdFragment extends Fragment implements View.OnClickListener {
 
         PrefsUtils.putImei(getActivity(), newImei);
 
-        // Copy back the new Device Id Changer pref to apply changes
-        ShellUtils.copyFileAsRoot(myDeviceIdChangerPrefsPath, deviceIdChangerPrefsPath);
-
-        // Set read - write permission for new Device Id Changer pref
-        ShellUtils.setPerm(deviceIdChangerPrefsPath);
-
-        showCurDevice();
+        new ChangeDeviceInfoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
+
+    private class ChangeDeviceInfoTask extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            // Copy back the new Device Id Changer pref to apply changes
+            ShellUtils.copyFileAsRoot(myDeviceIdChangerPrefsPath, deviceIdChangerPrefsPath);
+
+            // Set read - write permission for new Device Id Changer pref
+            ShellUtils.setPerm(deviceIdChangerPrefsPath);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            showCurDevice();
+        }
+    }
+
+    private class ShowCurDeviceTask extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            // Copy the old Device Id Changer pref to get information and edit
+            ShellUtils.copyFileAsRoot(deviceIdChangerPrefsPath, myDeviceIdChangerPrefsPath);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            String text = PrefsUtils.getImei(getActivity());
+            tvCurDevice.setText(text);
+        }
+    }
+
 }

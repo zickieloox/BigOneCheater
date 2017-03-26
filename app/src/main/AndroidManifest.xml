@@ -27,9 +27,29 @@
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:taskAffinity=""
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.UninstallActivity" />
-        <activity android:name=".activity.InstallActivity" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.UninstallActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.InstallActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
