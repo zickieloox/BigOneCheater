@@ -14,7 +14,7 @@ public class AppUtils {
     private static final String TAG = "AppUtils";
 
     public static boolean installAsRoot(String apkFilePath) {
-        apkFilePath = getValid(apkFilePath);
+        apkFilePath = ShellUtils.getValid(apkFilePath);
         CommandResult result = Shell.SU.run("pm install " + apkFilePath);
 
         if (result.exitCode == 0) {
@@ -78,9 +78,4 @@ public class AppUtils {
         return pi.applicationInfo.packageName;
     }
 
-    // A function make the target String to a valid String works with
-    // Shell Commands - replace all spaces with " "
-    private static String getValid(String targetString) {
-        return targetString.replaceAll("\\s+", "\" \"");
-    }
 }

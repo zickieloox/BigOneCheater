@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.zic.bigonecheater">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -15,7 +16,7 @@
             android:name=".activity.DialogActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
+            <intent-filter tools:ignore="GoogleAppIndexingWarning">
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
 
@@ -28,24 +29,44 @@
             android:launchMode="singleInstance"
             android:taskAffinity=""
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
+            <intent-filter tools:ignore="GoogleAppIndexingWarning">
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.UninstallActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">>
-            <intent-filter>
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            >
+            <intent-filter tools:ignore="GoogleAppIndexingWarning">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.InstallActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">>
-            <intent-filter>
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            >
+            <intent-filter tools:ignore="GoogleAppIndexingWarning">
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.AutoNextActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter tools:ignore="GoogleAppIndexingWarning">
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.AutoPreviousActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter tools:ignore="GoogleAppIndexingWarning">
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>

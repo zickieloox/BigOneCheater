@@ -3,15 +3,12 @@ package com.zic.bigonecheater.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.Set;
-
 public class PrefsUtils {
 
     private static final String PREFS_MAIN = "prefs";
     private static final String KEY_CURRENT_ACCOUNT = "cur_account";
     private static final String KEY_FIRST_RUN = "first_run";
 
-    //private static final String PREFS_DEVICE_ID_CHANGER = "user_prefs";
     private static final String PREFS_DEVICE_ID_CHANGER = "xpref_config";
     private static final String KEY_IMEI = "imei";
     private static final String KEY_DEVICE_ID = "android_id";
@@ -22,19 +19,6 @@ public class PrefsUtils {
 
     private static SharedPreferences getSharedPreferences(Context context, String prefsName) {
         return context.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
-    }
-
-    public static Set<String> getStringSet(final Context context, final String key, final Set<String> defaultValue) {
-        return PrefsUtils.getSharedPreferences(context, PREFS_MAIN).getStringSet(key, defaultValue);
-    }
-
-    public static boolean putStringSet(final Context context, final String key, final Set<String> value) {
-        final SharedPreferences.Editor editor = PrefsUtils.getSharedPreferences(context, PREFS_MAIN).edit();
-
-        editor.remove(key);
-        editor.putStringSet(key, value);
-
-        return editor.commit();
     }
 
     public static int getCurrentAccount(final Context context) {

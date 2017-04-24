@@ -90,7 +90,7 @@ public class ShellUtils {
 
     // A function make the target String to a valid String works with
     // Shell Commands - replace all spaces with " "
-    private static String getValid(String targetString) {
+    public static String getValid(String targetString) {
         return targetString.replaceAll("\\s+", "\" \"");
     }
 }

@@ -38,28 +38,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnPrevFid"
+                android:id="@+id/btnPrevFbAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:text="@string/btn_prev_fid" />
 
-            <EditText
-                android:id="@+id/edtCurAccount"
+            <TextView
+                android:id="@+id/tvCurAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:gravity="center"
                 android:text="1"
                 android:textColor="@color/colorPrimary"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
             <Button
-                android:id="@+id/btnNextFid"
+                android:id="@+id/btnNextFbAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
@@ -68,15 +68,15 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvFid"
+            android:id="@+id/tvFacebookId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@color/colorPrimary"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:gravity="center"
             android:text="@string/tv_fb_id"
             android:textColor="@color/colorWhite"
-            android:textSize="25sp" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/tvPassword"
@@ -87,7 +87,7 @@
             android:gravity="center"
             android:text="@string/tv_fb_pass"
             android:textColor="@color/colorWhite"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <FrameLayout
             android:id="@+id/deviceIdContainer"

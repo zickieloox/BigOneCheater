@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zic.bigonecheater.R;
 import com.zic.bigonecheater.utils.PrefsUtils;
@@ -20,11 +21,8 @@ public class DeviceIdFragment extends Fragment implements View.OnClickListener {
 
     @SuppressLint("SdCardPath")
     private static final String androidDataPath = "/data/data/";
-    //private static final String deviceEmulatorPkgName = "com.device.emulator";
     private static final String deviceIdChangerPkgName = "com.phoneinfo.changerpro";
     private static final String myPackageName = "com.zic.bigonecheater";
-    //private static final String deviceEmulatorPrefsPath = androidDataPath + deviceEmulatorPkgName + "/shared_prefs/user_prefs.xml";
-    //private static final String myNewDeviceInfoPrefsPath = androidDataPath + myPackageName + "/shared_prefs/user_prefs.xml";
     private static final String deviceIdChangerPrefsPath = androidDataPath + deviceIdChangerPkgName + "/shared_prefs/xpref_config.xml";
     private static final String myDeviceIdChangerPrefsPath = androidDataPath + myPackageName + "/shared_prefs/xpref_config.xml";
 
@@ -61,33 +59,37 @@ public class DeviceIdFragment extends Fragment implements View.OnClickListener {
 
     public void changeDeviceInfo() {
 
+        String newImei = RandomUtils.newValidImei();
+
+        PrefsUtils.putImei(getActivity(), newImei);
+
         new ChangeDeviceInfoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private class ChangeDeviceInfoTask extends AsyncTask {
+    private class ChangeDeviceInfoTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected Object doInBackground(Object[] params) {
+        protected Void doInBackground(Void... params) {
             // Copy back the new Device Id Changer pref to apply changes
             ShellUtils.copyFileAsRoot(myDeviceIdChangerPrefsPath, deviceIdChangerPrefsPath);
 
             // Set read - write permission for new Device Id Changer pref
             ShellUtils.setPerm(deviceIdChangerPrefsPath);
+
             return null;
         }
 
         @Override
-        protected void onPostExecute(Object o) {
-            String newImei = RandomUtils.newValidImei();
-            PrefsUtils.putImei(getActivity(), newImei);
+        protected void onPostExecute(Void aVoid) {
             showCurDevice();
+            Toast.makeText(getActivity(), getString(R.string.toast_new_device), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private class ShowCurDeviceTask extends AsyncTask {
+    private class ShowCurDeviceTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected Object doInBackground(Object[] params) {
+        protected Void doInBackground(Void... params) {
             // Copy the old Device Id Changer pref to get information and edit
             ShellUtils.copyFileAsRoot(deviceIdChangerPrefsPath, myDeviceIdChangerPrefsPath);
 
@@ -95,7 +97,7 @@ public class DeviceIdFragment extends Fragment implements View.OnClickListener {
         }
 
         @Override
-        protected void onPostExecute(Object o) {
+        protected void onPostExecute(Void aVoid) {
             String text = PrefsUtils.getImei(getActivity());
             tvCurDevice.setText(text);
         }

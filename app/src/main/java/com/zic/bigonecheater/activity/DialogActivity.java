@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +28,11 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
     @SuppressLint("SdCardPath")
     private static final String accountListPath = "/sdcard/Zickie/accounts.txt";
 
-    private Button btnNextFid;
-    private Button btnPrevFid;
-    private TextView tvFid;
+    private Button btnNextFbAccount;
+    private Button btnPrevFbAccount;
+    private TextView tvFacebookId;
     private TextView tvPassword;
-    private EditText edtCurAccount;
+    private TextView tvCurAccount;
 
     private int curAccount;
 
@@ -45,10 +44,10 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         Button btnNewBigOne = (Button) findViewById(R.id.btnNewBigOne);
         Button btnInstall = (Button) findViewById(R.id.btnInstall);
         Button btnUninstall = (Button) findViewById(R.id.btnUninstall);
-        btnPrevFid = (Button) findViewById(R.id.btnPrevFid);
-        btnNextFid = (Button) findViewById(R.id.btnNextFid);
-        edtCurAccount = (EditText) findViewById(R.id.edtCurAccount);
-        tvFid = (TextView) findViewById(R.id.tvFid);
+        btnPrevFbAccount = (Button) findViewById(R.id.btnPrevFbAccount);
+        btnNextFbAccount = (Button) findViewById(R.id.btnNextFbAccount);
+        tvCurAccount = (TextView) findViewById(R.id.tvCurAccount);
+        tvFacebookId = (TextView) findViewById(R.id.tvFacebookId);
         tvPassword = (TextView) findViewById(R.id.tvPassword);
 
         showCurAccount();
@@ -58,8 +57,8 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         getSupportFragmentManager().beginTransaction().add(R.id.deviceIdContainer, deviceIdFragment).commit();
 
         btnNewBigOne.setOnClickListener(this);
-        btnPrevFid.setOnClickListener(this);
-        btnNextFid.setOnClickListener(this);
+        btnPrevFbAccount.setOnClickListener(this);
+        btnNextFbAccount.setOnClickListener(this);
         btnInstall.setOnClickListener(this);
         btnUninstall.setOnClickListener(this);
     }
@@ -69,7 +68,7 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         int id = v.getId();
         switch (id) {
             case R.id.btnNewBigOne:
-                newBigOne();
+                launchBigOne();
                 break;
             case R.id.btnInstall:
                 installApps();
@@ -77,17 +76,18 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btnUninstall:
                 uninstallApps();
                 break;
-            case R.id.btnPrevFid:
-                prevFid();
+            case R.id.btnPrevFbAccount:
+                prevFbAccount();
                 break;
-            case R.id.btnNextFid:
-                nextFid();
+            case R.id.btnNextFbAccount:
+                nextFbAccount();
                 break;
         }
     }
 
-    public void newBigOne() {
+    public void launchBigOne() {
         new NewBigOneTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        uninstallApps();
     }
 
     public void installApps() {
@@ -100,25 +100,25 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         startActivity(uninstallIntent);
     }
 
-    public void prevFid() {
+    public void prevFbAccount() {
         if (curAccount <= 0) {
-            btnPrevFid.setEnabled(false);
+            btnPrevFbAccount.setEnabled(false);
             return;
         }
-        btnNextFid.setEnabled(true);
+        btnNextFbAccount.setEnabled(true);
         PrefsUtils.putCurrentAccount(this, curAccount - 1);
         showCurAccount();
         showAccountInfo();
     }
 
-    public void nextFid() {
+    public void nextFbAccount() {
         ArrayList<String> accountList;
         accountList = FileUtils.getLineList(accountListPath);
         if (curAccount >= (accountList.size() - 1)) {
-            btnNextFid.setEnabled(false);
+            btnNextFbAccount.setEnabled(false);
             return;
         }
-        btnPrevFid.setEnabled(true);
+        btnPrevFbAccount.setEnabled(true);
         PrefsUtils.putCurrentAccount(this, curAccount + 1);
         showCurAccount();
         showAccountInfo();
@@ -126,50 +126,49 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
 
     public void showCurAccount() {
         curAccount = PrefsUtils.getCurrentAccount(this);
-        edtCurAccount.setText(String.valueOf(curAccount));
+        tvCurAccount.setText(String.valueOf(curAccount));
     }
 
     public void showAccountInfo() {
         String account = FileUtils.getLine(accountListPath, curAccount);
         String[] accountArr;
-        String fid;
+        String facebookId;
         String password;
 
         if (account != null) {
             if (account.contains("|")) {
                 accountArr = account.split("[|]");
-                fid = accountArr[0];
+                facebookId = accountArr[0];
                 password = accountArr[1];
             } else {
-                fid = account;
+                facebookId = account;
                 password = "default";
             }
 
         } else {
-            Toast.makeText(this, "Current FB Account: " + curAccount + " Not Found!", Toast.LENGTH_SHORT).show();
-            tvFid.setText("N/A");
+            tvFacebookId.setText("N/A");
             tvPassword.setText("N/A");
             return;
         }
 
-        ((ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("FacebookID", fid));
+        ((ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("FacebookID", facebookId));
 
-        String text = getString(R.string.tv_fb_id) + fid;
-        tvFid.setText(text);
+        String text = getString(R.string.tv_fb_id) + facebookId;
+        tvFacebookId.setText(text);
         text = getString(R.string.tv_fb_pass) + password;
         tvPassword.setText(text);
     }
 
-    private class NewBigOneTask extends AsyncTask {
+    private class NewBigOneTask extends AsyncTask<Void, Void, Void> {
         @Override
-        protected Object doInBackground(Object[] params) {
+        protected Void doInBackground(Void... params) {
             AppUtils.killAsRoot(bigOnePkgName);
 
             return null;
         }
 
         @Override
-        protected void onPostExecute(Object o) {
+        protected void onPostExecute(Void aVoid) {
             if (!AppUtils.launch(DialogActivity.this, bigOnePkgName)) {
                 Toast.makeText(DialogActivity.this, getString(R.string.toast_err_launch), Toast.LENGTH_SHORT).show();
             }

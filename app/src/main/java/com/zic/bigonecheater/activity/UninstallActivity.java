@@ -22,26 +22,27 @@ public class UninstallActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        File bigOneAppsDir = new File(boAppsPath);
-        List<String> pkgNames = new ArrayList<>();
-        for (File apkFile : bigOneAppsDir.listFiles()) {
-            String apkFilePath = apkFile.getAbsolutePath();
-            String pkgName = AppUtils.getPkgNameFromApk(this, apkFilePath);
-
-            pkgNames.add(pkgName);
-        }
+        moveTaskToBack(true);
+        finish();
 
         Toast.makeText(this, "Uninstalling...", Toast.LENGTH_SHORT).show();
 
-        new UninstallActivity.UninstallTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pkgNames);
+        new UninstallTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private class UninstallTask extends AsyncTask<List<String>, Void, String> {
+    private class UninstallTask extends AsyncTask<Void, Void, Void> {
 
-        @SafeVarargs
         @Override
-        protected final String doInBackground(List<String>... params) {
-            List<String> pkgNames = params[0];
+        protected final Void doInBackground(Void... params) {
+            File bigOneAppsDir = new File(boAppsPath);
+            List<String> pkgNames = new ArrayList<>();
+            for (File apkFile : bigOneAppsDir.listFiles()) {
+                String apkFilePath = apkFile.getAbsolutePath();
+                String pkgName = AppUtils.getPkgNameFromApk(UninstallActivity.this, apkFilePath);
+
+                pkgNames.add(pkgName);
+            }
+
             for (int i = 0; i < pkgNames.size(); i++) {
                 AppUtils.uninstallAsRoot(pkgNames.get(i));
             }
@@ -49,8 +50,9 @@ public class UninstallActivity extends Activity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(Void aVoid) {
             Toast.makeText(UninstallActivity.this, getString(R.string.toast_uninstalled), Toast.LENGTH_SHORT).show();
+
             finish();
         }
     }
