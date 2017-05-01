@@ -30,6 +30,9 @@ public class AutoNextActivity extends AppCompatActivity {
     @SuppressLint("SdCardPath")
     private static final String accountListPath = "/sdcard/Zickie/accounts.txt";
 
+    @SuppressLint("SdCardPath")
+    private static final String zickiePath = "/sdcard/Zickie";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,20 +62,28 @@ public class AutoNextActivity extends AppCompatActivity {
         String account = FileUtils.getLine(accountListPath, curAccount);
         String[] accountArr;
         String facebookId;
+        String password;
 
         if (account != null) {
             if (account.contains("|")) {
                 accountArr = account.split("[|]");
                 facebookId = accountArr[0];
+                password = accountArr[1];
             } else {
                 facebookId = account;
+                password = "zxzxzx";
             }
 
         } else {
             facebookId = "N/A";
+            password = "N/A";
         }
 
         ((ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("FacebookID", facebookId));
+
+        String textData = facebookId + "|" + password;
+        FileUtils.writeToTextFile(zickiePath, "cur_account", textData);
+
     }
 
     public void uninstallApps() {

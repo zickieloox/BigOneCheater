@@ -28,6 +28,9 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
     @SuppressLint("SdCardPath")
     private static final String accountListPath = "/sdcard/Zickie/accounts.txt";
 
+    @SuppressLint("SdCardPath")
+    private static final String zickiePath = "/sdcard/Zickie";
+
     private Button btnNextFbAccount;
     private Button btnPrevFbAccount;
     private TextView tvFacebookId;
@@ -142,7 +145,7 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
                 password = accountArr[1];
             } else {
                 facebookId = account;
-                password = "default";
+                password = "zxzxzx";
             }
 
         } else {
@@ -152,6 +155,9 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         ((ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("FacebookID", facebookId));
+
+        String textData = facebookId + "|" + password;
+        FileUtils.writeToTextFile(zickiePath, "cur_account", textData);
 
         String text = getString(R.string.tv_fb_id) + facebookId;
         tvFacebookId.setText(text);
