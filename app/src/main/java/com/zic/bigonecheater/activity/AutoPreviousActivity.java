@@ -100,13 +100,20 @@ public class AutoPreviousActivity extends AppCompatActivity {
             // Set read - write permission for new Device Id Changer prefs
             ShellUtils.setPerm(deviceIdChangerPrefsPath);
 
+            AppUtils.killAsRoot(bigOnePkgName);
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             Toast.makeText(getApplicationContext(), getString(R.string.toast_new_device), Toast.LENGTH_SHORT).show();
-            new NewBigOneTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+            //new NewBigOneTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+
+            if (!AppUtils.launch(getApplicationContext(), bigOnePkgName)) {
+                Toast.makeText(getApplicationContext(), getString(R.string.toast_err_launch), Toast.LENGTH_SHORT).show();
+            }
+
             prevFbAccount();
             uninstallApps();
         }
